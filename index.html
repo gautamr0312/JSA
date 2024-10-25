@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPE Detection</title>
+    <style>
+        html{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100%;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .container {
+            background-color: whitesmoke;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 16px;
+            border-radius: 10px;
+            text-align: left;
+            border-top: 80px solid lightgreen;
+            position: relative;
+            margin-top: 30px;
+        }
+        .logo {
+            position: absolute; /* Position the logo absolutely */
+            top: -65px; /* Adjust as needed */
+            left: 20px; /* Adjust as needed */
+            width: 250px; /* Adjust the size of the logo */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 12px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #357ae8;
+        }
+
+        /* Disabled submit button style */
+        .disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #555;
+        }
+        h1 {
+            margin-top: 0px;
+            font-size: 24px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        input[type="text"], input[type="date"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .name-group {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .name-group .input-box {
+            width: 48%;
+        }
+
+        #imagePreview,
+        #predictionResult {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #imagePreview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .submit-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!--Logo-->
+    <img src="StrataLogo.jpg" class="logo">
+    
+    <h1>Safety Tool</h1>
+
+    <!--Date-->
+    <label for="date">Date</label>
+    <input type="text" id="date" class="input-box">
+
+    <!--Job Name-->
+    <label for="jobname">Select Job category:</label>
+    <select id="jobname">
+        <option value="" selected disabled>None</option>
+        <option value="Automation">Automation</option>
+        <option value="Electrical">Electrical</option>
+        <option value="Mechanical">Mechanical</option>
+    </select>
+    <br>
+    <br>
+
+    <!--Work Location-->
+    <label for="location">Work Location</label>
+    <input type="text" id="location" class="input-box">
+
+    <!--Name-->
+    <label for="firstname">Name</label>
+    <div class="name-group">
+        <div class="input-box">
+            <input type="text" id="firstname" placeholder="First Name">
+        </div>
+        <div class="input-box">
+            <input type="text" id="lastname" placeholder="Last Name">
+        </div>
+    </div>
+
+    <label for="sup_name">Supervisor</label>
+    <div class="name-group">
+        <div class="input-box">
+            <input type="text" id="sup_name" placeholder="Supervisor Name">
+        </div>
+        <div class="input-box">
+            <input type="text" id="sup_phone" placeholder="Phone Number">
+        </div>
+    </div>
+
+    <label for="safety_name">Safety Officer</label>
+    <div class="name-group">
+        <div class="input-box">
+            <input type="text" id="safety_name" placeholder="Safety Officer Name">
+        </div>
+        <div class="input-box">
+            <input type="text" id="safety_phone" placeholder="Phone Number">
+        </div>
+    </div>
+
+
+    <label for="hazard">What is the most hazardous part of the job and what are you going to do to control the hazard?</label>
+    <input type="text" id="hazard" class="input-box">
+
+    <label>Are you properly trained to complete these tasks?</label>
+    <div style="display: flex; gap: 20px;">
+        <label>
+            <input type="radio" name="options" value="Yes"> Yes
+        </label>
+        <label>
+            <input type="radio" name="options" value="No"> No
+        </label>
+        <label>
+            <input type="text" id="sse" placeholder="SSE">
+        </label>
+        <label>
+            <input type="text" id="mentor" placeholder="Mentor">
+        </label>
+    </div>
+    <br>
+
+    <label for="need">What do you need to ensure this job is completed incident and injury free?</label>
+    <input type="text" id="need" class="input-box">
+    <br>
+
+    <label for="cond">What conditions, job changes, or distractions could call for the need to use Stop Work Authority?</label>
+    <input type="text" id="cond" class="input-box">
+    <br>
+
+    <label for="steps">Sequence of Job Steps/Potential Hazards/Recommended Actions</label>
+    <textarea id="steps"></textarea>
+    <br>
+    <br>
+
+    <label>Gas Detection Equipment Needed</label>
+    <div style="display: flex; gap: 20px;">
+        <label>
+            <input type="checkbox" name="equipment" value="H2S Monitor"> H2S Monitor
+        </label>
+        <label>
+            <input type="checkbox" name="equipment" value="LEL, O2, H2S Monitor"> LEL, O2, H2S Monitor
+        </label>
+    </div>
+    <br>
+
+    <label for="weather">Weather</label>
+    <input type="text" id="weather" class="input-box">
+    <br>
+
+    <label for="wildlife">Wild Life</label>
+    <input type="text" id="wildlife" class="input-box">
+    <br>
+
+    <label for="terrain">Terrain</label>
+    <input type="text" id="terrain" class="input-box">
+    <br>
+
+    <!-- Image Upload Button -->
+    <label for="worksite">Upload Work site Diagram</label>
+    <input type="file" id="worksite" class="button" accept="image/*">
+    <br>
+
+    <!--Image Capture-->
+    <label>Image Capture</label>
+    <div class="img" style="text-align: right;">
+        <video id="videoElement" autoplay></video>
+        <button id="startButton">Start Webcam</button>
+        <button id="captureButton">Capture Photo</button>
+        <canvas id="canvasElement" style="display: none;"></canvas>
+        <img id="photoElement" style="display: none;">
+    </div>
+    <br>
+
+    <div id="predictionResult"></div>
+
+    <!-- Result Button -->
+    <div class="submit-button-container">
+        <button id="submitButton" class="button disabled" disabled>Submit</button>
+    </div>
+</div>
+
+<!--Script for handling webcam capture-->
+<script>
+    const videoElement = document.getElementById('videoElement');
+    const canvasElement = document.getElementById('canvasElement');
+    const photoElement = document.getElementById('photoElement');
+    const startButton = document.getElementById('startButton');
+    const captureButton = document.getElementById('captureButton');
+
+    let stream;
+
+    async function startWebcam() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoElement.srcObject = stream;
+            startButton.disabled = true;
+            captureButton.disabled = false;
+        } catch (error) {
+            console.error('Error accessing webcam:', error);
+        }
+    }
+
+    startButton.addEventListener('click', startWebcam);
+
+    function stopwebcam(){
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            videoElement.srcObject = null;
+            startButton.disabled = false;
+            captureButton.disabled = true;
+        }
+
+    }
+
+    function capturePhoto() {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        canvasElement.getContext('2d').drawImage(videoElement, 0, 0);
+        const photoDataUrl = canvasElement.toDataURL('image/jpeg');
+        photoElement.src = photoDataUrl;
+        photoElement.style.display = 'block';
+
+        stopwebcam();
+        
+        sendImage(photoDataUrl)
+        }
+
+    captureButton.addEventListener('click', capturePhoto);
+</script>
+
+
+<script>
+    loc_dt = {
+        "32.083145,-103.32264" : 'Pilot Solaris',
+        "32.138551,-103.27857" : 'Pinestraw',
+        "31.978353,-103.28062" : 'Grizzly',
+        '32.078193,-103.28260' : 'Redbud',
+        '32.018132,-103.25733' : 'Ikes Pond',
+        '32.078308,-103.27236' : 'Firethorn',
+        '32.081260,-103.30227' : 'Nandina',
+        '32.7,-103.1'  : 'Fairfield Inn',
+        '33.4,-112.0'  : 'Tea Olive 118-128'
+    }
+
+     // Autofill Weather
+     navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a6dc6cc5ea74109bbd7b8b4e62bd1809`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const tempF = (data.main.temp - 273.15) * 9/5 + 32;
+            document.getElementById('weather').value = tempF.toFixed(2) + '°F' + ' - ' + data.weather[0].description;
+        })
+        .catch(error => {
+            console.error('Error fecthing weather data:', error);
+        });
+
+        const lat1 = String(lat).split('.');
+        const lat2 = lat1[0] + '.'+lat1[1][0];
+
+        const lon1 = String(lon).split('.');
+        const lon2 = lon1[0] + '.'+ lon1[1][0];
+
+        const loc_str = lat2 + "," + lon2;
+        console.log(loc_str);
+
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw`;
+
+        if (loc_dt[loc_str]) {
+            console.log('True');
+            document.getElementById('location').value = loc_dt[loc_str];
+        } else{
+            console.log('False')
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const locationName = data.results[0].formatted_address;
+                    document.getElementById('location').value = locationName;
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+    });
+
+    var dt = new Date();
+    console.log(dt.toLocaleString().split(',')[0]);
+    document.getElementById('date').value = dt.toLocaleString().split(',')[0];
+
+    function sendImage(imageDataUrl) {
+        // Create a FormData object to send the image
+        const blob = dataURItoBlob(imageDataUrl);
+        console.log(blob);
+
+        const formData = new FormData();
+        formData.append('image', blob, "photo.jpg");
+
+        // Send the image to the API using Fetch
+        fetch('http://localhost:5000/predict', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Network Response not ok');
+            }
+            return response.json()
+        })
+        
+        .then(data => {
+            // Display the prediction result on the webpage
+            const result = data.predictionResult;
+            if (result === 'OK') {
+                document.getElementById('predictionResult').innerText = 'Thank you for following the safety protocol';
+                document.getElementById('submitButton').disabled = false;
+                document.getElementById('submitButton').classList.remove('disabled');
+            } else {
+                document.getElementById('predictionResult').innerText = 'Please wear your hardhat';
+                document.getElementById('submitButton').disabled = true;
+                document.getElementById('submitButton').classList.add('disabled');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Autofill Mentor name
+    supervisor_list = {'Automation' : ['Nirmal','210-428-8458'],
+                   'Electrical' : ['xyz','123-456-7890'],
+                   'Mechanical' : ['abc','789-456-1230']
+                   }
+    safety_list = {'Automation' : ['Jose','210-370-2277'],
+                   'Electrical' : ['pqr','145-564-8901'],
+                   'Mechanical' : ['asd','234-876-9012']
+                   } 
+
+    document.getElementById('jobname').addEventListener('click', function(){
+        var job = document.getElementById('jobname').value;
+        if (supervisor_list[job]){
+            document.getElementById('sup_name').value = supervisor_list[job][0];
+            document.getElementById('sup_phone').value = supervisor_list[job][1];
+        }
+        else {
+            document.getElementById('sup_name').value = 'Not Found';
+            document.getElementById('sup_phone').value = 'Not Found';
+        }
+        if (safety_list[job]){
+            document.getElementById('safety_name').value = safety_list[job][0];
+            document.getElementById('safety_phone').value = safety_list[job][1];
+        }
+        else {
+            document.getElementById('safety_name').value = 'Not Found';
+            document.getElementById('safety_phone').value = 'Not Found';
+        }
+    })
+
+    // Image Upload functionality
+    document.getElementById('captureButton').addEventListener('change', sendImage);
+    
+    function dataURItoBlob(dataURI) {
+        // Convert base64 to raw binary data held in a string
+        const byteString = atob(dataURI.split(',')[1]);
+
+        // Separate out the mime component
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // Write the bytes of the string to an ArrayBuffer
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        // Create a blob for the image
+        return new Blob([ab], { type: mimeString });
+    }
+
+    //Submit Button functionality
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwwbLxMB6CszXCv2NcSZZUoeUkBk_4S7OP3bQrgsN-vrjsCcAwS0xIPIrV571NAMIPs/exec';
+
+    
+    document.getElementById('submitButton').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('date', document.getElementById('date').value);
+        formData.append('jobname', document.getElementById('jobname').value);
+        formData.append('location', document.getElementById('location').value);
+        formData.append('firstname', document.getElementById('firstname').value);
+        formData.append('lastname', document.getElementById('lastname').value);
+        formData.append('sup_name', document.getElementById('sup_name').value);
+        formData.append('sup_phone', document.getElementById('sup_phone').value);
+        formData.append('safety_name', document.getElementById('safety_name').value);
+        formData.append('safety_phone', document.getElementById('safety_phone').value);
+        formData.append('hazard', document.getElementById('hazard').value);
+
+        const option = document.querySelector('input[name="options"]:checked');
+        if (option) formData.append('option', option.value);
+        
+        formData.append('sse', document.getElementById('sse').value);
+        formData.append('mentor', document.getElementById('mentor').value);
+        formData.append('need', document.getElementById('need').value);
+        formData.append('cond', document.getElementById('cond').value);
+        formData.append('steps', document.getElementById('steps').value);
+        
+        const equips = [];
+        document.querySelectorAll('input[name="equipment"]:checked').forEach(checkbox => {
+            equips.push(checkbox.value);
+        });
+        formData.append('equipment', equips.join(','));
+        formData.append('weather', document.getElementById('weather').value);
+        formData.append('wildlife', document.getElementById('wildlife').value);
+        formData.append('terrain', document.getElementById('terrain').value);
+        formData.append('predictionResult', document.getElementById('predictionResult').innerText);
+
+        // Process the worksite diagram
+        const fileInput1 = document.getElementById('worksite');
+        const file1 = fileInput1.files[0];
+        if (!file1) {
+            alert('Please upload a worksite diagram');
+            return;
+        }
+
+        // Process the photo
+        const canvasele = document.getElementById("canvasElement");
+        const url = canvasele.toDataURL('image/jpeg');
+
+        const photoblob = dataURItoBlob(url);
+        console.log(photoblob);
+
+        // Read and process both files
+        Promise.all([
+            new Promise((resolve) => {
+                const reader1 = new FileReader();
+                reader1.onload = e => resolve(e.target.result.split(',')[1]);
+                reader1.readAsDataURL(file1);
+            }),
+            new Promise((resolve) => {
+                const reader2 = new FileReader();
+                reader2.onload = e => resolve(e.target.result.split(',')[1]); // Base64 for photo blob
+                reader2.readAsDataURL(photoblob);
+            })
+        ]).then(([base64File1, base64File2]) => {
+            formData.append('worksite', base64File1);
+            formData.append('image', base64File2);
+
+            // Submit the form
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData 
+            })
+            .then(response => response.text())
+            .then(responseText => {
+                try {
+                    // Try to parse as JSON
+                    const data = JSON.parse(responseText);
+                    if (data.status === 'success') {
+                        alert('Form submitted successfully!');
+                    } else {
+                        alert('Error: ' + (data.message || 'Unknown error occurred'));
+                    }
+                } catch (e) {
+                    // If not JSON, handle as text
+                    if (responseText.includes('Success')) {
+                        alert('Form submitted successfully!');
+                    } else {
+                        alert('Error submitting form: ' + responseText);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error!', error);
+                alert('Error submitting form. Please try again.');
+            });
+        });
+        console.log(formData)
+    });
+</script>
+
+</body>
+</html>
