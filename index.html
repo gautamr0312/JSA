@@ -380,7 +380,7 @@
         formData.append('image', blob, "photo.jpg");
 
         // Send the image to the API using Fetch
-        fetch('http://192.1.168.144:5000/predict', {
+        fetch('https://hardhat-model-detector.onrender.com/predict', {
             method: 'POST',
             body: formData,
         })
