@@ -374,7 +374,7 @@
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
+    function sendImage(imageDataUrl){
     // Show loading state
     document.getElementById('predictionResult').innerText = 'Processing image...';
     
@@ -418,7 +418,7 @@
         console.error('Error:', error);
         document.getElementById('predictionResult').innerText = 'Error processing image. Please try again.';
     });
-
+    }
     // Autofill Mentor name
     supervisor_list = {'Automation' : ['Nirmal','210-428-8458'],
                    'Electrical' : ['xyz','123-456-7890'],
