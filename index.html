@@ -449,7 +449,7 @@
     fetch('https://hardhat-model-detector.onrender.com/predict', {
         method: 'POST',
         body: formData,
-        mode: 'no-cors'  // Explicitly set CORS mode
+        mode: 'cors'  // Explicitly set CORS mode
     })
     .then(response => {
         console.log('Received response:', response);
