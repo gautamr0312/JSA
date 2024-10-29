@@ -166,11 +166,17 @@
         <option value="yes">Yes</option>
     </select>
 
+    <br>
+    <br>
+
     <div id="member-count-section" style="display: none;">
         <label for="member-count">How many members?</label>
         <input type="number" id="member-count" min="1" onchange="generateMemberFields()" />
     </div>
-
+    
+    <br>
+    <br>
+    
     <div id="member-fields"></div>
 
 
@@ -349,11 +355,15 @@
         for (let i = 1; i <= memberCount; i++) {
             const memberDiv = document.createElement("div");
             memberDiv.innerHTML = `
-                <h5>Member ${i}</h5>
-                <label>First Name:</label>
-                <input type="text" name="firstName${i}" required />
-                <label>Last Name:</label>
-                <input type="text" name="lastName${i}" required />
+                <label>Member {i}</label>
+                <div class="name-group">
+                    <div class="input-box">
+                        <input type="text" id="firstname" placeholder="First Name">
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="lastname" placeholder="Last Name">
+                    </div>
+                </div>
             `;
             memberFields.appendChild(memberDiv);
         }
