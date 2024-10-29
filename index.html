@@ -160,6 +160,20 @@
         </div>
     </div>
 
+    <label for ="add-members">Do you want to add members?</label>
+    <select id="add-members" onchange="handleteamselection()">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+    </select>
+
+    <div id="member-count-section" style="display: none;">
+        <label for="member-count">How many members?</label>
+        <input type="number" id="member-count" min="1" onchange="generateMemberFields()" />
+    </div>
+
+    <div id="member-fields"></div>
+
+
     <label for="sup_name">Supervisor</label>
     <div class="name-group">
         <div class="input-box">
@@ -312,6 +326,39 @@
 
 
 <script>
+    function handleteamselection(){
+        const addmembers = document.getElementById("add-members").value;
+        const membercount = document.getElementById("member-count-selection");
+
+        if (addmembers=="yes"){
+            membercount.style.display = "block";
+        }
+        else{
+            membercount.style.display = "none";
+        }
+    }
+
+    function generateMemberFields(){
+        const memberCount = parseInt(document.getElementById("member-count").value);
+        const memberFields = document.getElementById("member-fields");
+
+        // Clear any existing member fields
+        memberFields.innerHTML = "";
+
+        // Generate input fields based on the member count
+        for (let i = 1; i <= memberCount; i++) {
+            const memberDiv = document.createElement("div");
+            memberDiv.innerHTML = `
+                <h3>Member ${i}</h3>
+                <label>First Name:</label>
+                <input type="text" name="firstName${i}" required />
+                <label>Last Name:</label>
+                <input type="text" name="lastName${i}" required />
+            `;
+            memberFields.appendChild(memberDiv);
+        }
+    }
+
     loc_dt = {
         "32.083145,-103.32264" : 'Pilot Solaris',
         "32.138551,-103.27857" : 'Pinestraw',
@@ -374,7 +421,8 @@
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    function sendImage(imageDataUrl){
+    function sendImage(imageDataUrl)
+    {
     // Show loading state
     document.getElementById('predictionResult').innerText = 'Processing image...';
     
@@ -391,7 +439,7 @@
     fetch('https://hardhat-model-detector.onrender.com/predict', {
         method: 'POST',
         body: formData,
-        mode: 'cors'  // Explicitly set CORS mode
+        mode: 'no-cors'  // Explicitly set CORS mode
     })
     .then(response => {
         console.log('Received response:', response);
@@ -516,6 +564,7 @@
             return;
         }
 
+
         // Process the photo
         const canvasele = document.getElementById("canvasElement");
         const url = canvasele.toDataURL('image/jpeg');
@@ -538,6 +587,17 @@
         ]).then(([base64File1, base64File2]) => {
             formData.append('worksite', base64File1);
             formData.append('image', base64File2);
+
+        const memberCount = parseInt(document.getElementById('memberCount').value || 0);
+        formData.append('teamMemberCount', memberCount);
+        if (memberCount!=0){
+            for (let i = 1; i <= memberCount; i++) {
+                const firstName = document.getElementById(`member${i}_firstName`).value;
+                const lastName = document.getElementById(`member${i}_lastName`).value;
+                formData.append(`member${i}_firstName`, firstName);
+                formData.append(`member${i}_lastName`, lastName);
+            }
+        }
 
             // Submit the form
             fetch(scriptURL, { 
