@@ -598,7 +598,7 @@
             formData.append('worksite', base64File1);
             formData.append('image', base64File2);
 
-        const memberCount = parseInt(document.getElementById('memberCount').value || 0);
+        const memberCount = parseInt(document.getElementById('member-count').value || 0);
         formData.append('teamMemberCount', memberCount);
         if (memberCount!=0){
             for (let i = 1; i <= memberCount; i++) {
