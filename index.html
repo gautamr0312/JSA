@@ -603,8 +603,8 @@
         formData.append('teamMemberCount', memberCount);
         if (memberCount!=0){
             for (let i = 1; i <= memberCount; i++) {
-                const firstName = document.getElementById(`member${i}_firstName`).value;
-                const lastName = document.getElementById(`member${i}_lastName`).value;
+                const firstName = document.getElementById(`member${i}_firstname`).value;
+                const lastName = document.getElementById(`member${i}_lastname`).value;
                 formData.append(`member${i}_firstName`, firstName);
                 formData.append(`member${i}_lastName`, lastName);
             }
