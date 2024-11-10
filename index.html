@@ -436,7 +436,11 @@
         const service = new google.maps.places.PlacesService(map);
         service.nearbySearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                document.getElementById('hospital').value = results[0].name + ';' + results[0].vicinity;
+                const hosp = document.getElementById('hospital');
+                const latitude = results[0].geometry.location.lat;
+                const longitude = results[0].geometry.location.lon;
+                const mapsLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                hosp.innerHTML = `<a href="${mapsLink}" target="_blank">${results[0].name}</a>`;
             } else {
                 alert("Could not find nearby hospitals.");
             }
