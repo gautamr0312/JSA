@@ -385,20 +385,6 @@
         '33.4,-112.0'  : 'Tea Olive 118-128'
     }
 
-    function jsonp(url, callback) {
-        const script = document.createElement('script');
-        const callbackName = 'jsonp_' + Math.round(100000 * Math.random());
-        window[callbackName] = function(data) {
-            delete window[callbackName];
-            document.body.removeChild(script);
-            callback(data);
-        };
-        
-        script.src = `${url}&callback=${callbackName}`;
-        document.body.appendChild(script);
-    }
-
-
     proxyurl = 'https://script.google.com/macros/s/AKfycby_fsTAeeJnJU5gNk7VDw9LiLwwVp0wqYerIRUfHbWvpX4dB5jViHOSTG3RK1Q4Axs/exec';
     
     const types = ['fire_station', 'police', 'hospital'];
@@ -447,19 +433,22 @@
         types.forEach(type => {
             const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
         
-            jsonp(url,function(data)
-            {
+            fetch(url2)
+            .then(response => response.json())
+            .then(data => {
                 if (data.results && data.results.length > 0) {
                     const service = data.results[0];
-                    console.log(service);
                     servicesDiv.innerHTML += `<h3>Nearest ${type.replace('_', ' ')}</h3>
-                                            <p>Name: ${service.name}</p>
-                                            <p>Address: ${service.vicinity}</p>
-                                            <p>Rating: ${service.rating || 'N/A'}</p><hr>`;
+                                               <p>Name: ${service.name}</p>
+                                               <p>Address: ${service.vicinity}</p>
+                                               <p>Rating: ${service.rating || 'N/A'}</p><hr>`;
                 } else {
                     servicesDiv.innerHTML += `<p>No ${type.replace('_', ' ')} found nearby.</p>`;
                 }
             })
+            .catch(error => {
+                servicesDiv.innerHTML += `<p>Error fetching ${type.replace('_', ' ')} details: ${error}</p>`;
+            });
         });
     });
     
