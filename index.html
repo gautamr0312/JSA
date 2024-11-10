@@ -425,11 +425,11 @@
                 .catch(error => console.error('Error:', error));
             }
         const map = new google.maps.Map(document.createElement('div'),{
-            center: {lat: lat2, lng: lon2},
+            center: {lat: lat, lng: lon},
             zoom: 15
         });
         const request = {
-            location: new google.maps.LatLng(lat2, lon2),
+            location: new google.maps.LatLng(lat, lon),
             radius: '5000', // Search within 5 km radius
             type: ['hospital']
         };
