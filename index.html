@@ -120,6 +120,20 @@
             justify-content: center;
             margin-top: 20px;
         }
+        .service-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .service-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -151,17 +165,17 @@
 
     <!--Emergency Services-->
     <label for="Emergency">Emergency Services</label>
-    <div class="name-group">
-        <div class="input-box">
-            <input type="text" id="hospital" placeholder="Nearest Hospital">
-        </div>
-        <div class="input-box">
-            <input type="text" id="firestation" placeholder="Nearest Fire Station">
-        </div>
-        <div class="input-box">
-            <input type="text" id="sheriff" placeholder="Nearest Police Station">
-        </div>
-    </div>
+    <label>Nearest Hospital:</label>
+    <button id="hospital-btn" class="service-btn" onclick="openMap('hospital')">Loading...</button>
+    <br>
+    
+    <label>Nearest Fire Station:</label>
+    <button id="fire-station-btn" class="service-btn" onclick="openMap('fire-station')">Loading...</button>
+    <br>
+
+    <label>Nearest Sheriff Station:</label>
+    <button id="sheriff-station-btn" class="service-btn" onclick="openMap('sheriff-station')">Loading...</button>
+    <br>
     <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw&libraries=places"></script>
 
     <!--Name-->
@@ -434,7 +448,7 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
-        function findplaces(type, elementID){
+        function findplaces(type, elementID, servicename){
             const map = new google.maps.Map(document.createElement('div'),{
                 center: {lat: lat, lng: lon},
                 zoom: 15
@@ -452,16 +466,25 @@
                     const longitude = results[0].geometry.location.lng();
                     const mapsLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
                     console.log('${type} :', results[0]);
-                    element.value = mapsLink;
-                    element.addEventListener('click', () => window.open(mapsLink, "_blank"));
+                    element.setAttribute('data-link',mapsLink);
+                    element.textContent = 'Directions';
                 } else {
-                    element.value = 'Could not find nearby ${type.replace('-'," ")}.';
+                    element.removeAttribute('data-link');  // Remove any previous link
+                    element.textContent = `No nearby ${serviceName} found.`;
                 }
             });
         }
-        findplaces('hospital','hospital');
-        findplaces('fire_station','firestation');
-        findplaces('police','sheriff');
+        window.openMap = function(service) {
+            const button = document.getElementById(`${service}-btn`);
+            const mapsLink = button.getAttribute('data-link');
+            if (mapsLink) {
+                window.open(mapsLink, '_blank');  // Open the Google Maps link in a new tab
+            }
+        };
+
+        findplaces('hospital','hospital-btn','Hospital');
+        findplaces('fire_station','fire-station-btn','Fire Station');
+        findplaces('police','sheriff-station-btn','Sheriff Station');
     });
 
     var dt = new Date();
