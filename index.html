@@ -149,6 +149,10 @@
     <label for="location">Work Location</label>
     <input type="text" id="location" class="input-box">
 
+    <!--Emergency Services-->
+    <label for="emergency">Emergency Services</label>
+    <div id="services"></div>
+
     <!--Name-->
     <label for="firstname">Name</label>
     <div class="name-group">
@@ -365,7 +369,6 @@
                     </div>
                 </div>
             `;
-            console.log('memberdiv ',memberDiv);
             memberFields.appendChild(memberDiv);
         }
     }
@@ -390,7 +393,6 @@
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a6dc6cc5ea74109bbd7b8b4e62bd1809`)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             const tempF = (data.main.temp - 273.15) * 9/5 + 32;
             document.getElementById('weather').value = tempF.toFixed(2) + '°F' + ' - ' + data.weather[0].description;
         })
@@ -405,28 +407,51 @@
         const lon2 = lon1[0] + '.'+ lon1[1][0];
 
         const loc_str = lat2 + "," + lon2;
-        console.log(loc_str);
 
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw`;
 
         if (loc_dt[loc_str]) {
-            console.log('True');
             document.getElementById('location').value = loc_dt[loc_str];
         } else{
-            console.log('False')
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     const locationName = data.results[0].formatted_address;
                     document.getElementById('location').value = locationName;
+
                 })
                 .catch(error => console.error('Error:', error));
             }
+        
+        const types = ['fire_station', 'police', 'hospital'];
+        const servicesDiv = document.getElementById("services");
+        servicesDiv.innerHTML = ''; // Clear previous data
+
+        types.forEach(type => {
+            const url2 = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lon}&radius=5000&type=${type}&key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw`;
+            
+            fetch(url2)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const service = data.results[0];
+                        console.log(service);
+                        servicesDiv.innerHTML += `<h3>Nearest ${type.replace('_', ' ')}</h3>
+                                                <p>Name: ${service.name}</p>
+                                                <p>Address: ${service.vicinity}</p>
+                                                <p>Rating: ${service.rating || 'N/A'}</p><hr>`;
+                    } else {
+                        servicesDiv.innerHTML += `<p>No ${type.replace('_', ' ')} found nearby.</p>`;
+                    }
+                })
+                .catch(error => {
+                    servicesDiv.innerHTML += `<p>Error fetching ${type.replace('_', ' ')} details: ${error}</p>`;
+                });
+        });
 
     });
 
     var dt = new Date();
-    console.log(dt.toLocaleString().split(',')[0]);
     document.getElementById('date').value = dt.toLocaleString().split(',')[0];
 
     function sleep(ms) {
@@ -439,12 +464,9 @@
     
     // Create a FormData object to send the image
     const blob = dataURItoBlob(imageDataUrl);
-    console.log('Created blob:', blob);
     
     const formData = new FormData();
     formData.append('image', blob, "photo.jpg");
-
-    console.log('Sending request to server...');
 
     // Send the image to the API using Fetch
     fetch('https://hardhat-model-detector.onrender.com/predict', {
@@ -453,14 +475,12 @@
         mode: 'cors'  // Explicitly set CORS mode
     })
     .then(response => {
-        console.log('Received response:', response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
-        console.log('Processed data:', data);
         // Display the prediction result on the webpage
         const result = data.predictionResult;
         if (result === 'OK') {
@@ -581,7 +601,6 @@
         const url = canvasele.toDataURL('image/jpeg');
 
         const photoblob = dataURItoBlob(url);
-        console.log(photoblob);
 
         // Read and process both files
         Promise.all([
@@ -639,7 +658,6 @@
                 alert('Error submitting form. Please try again.');
             });
         });
-        console.log(formData)
     });
 </script>
 
