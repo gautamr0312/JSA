@@ -434,7 +434,8 @@
             const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
         
             fetch(url2, { 
-                method: 'POST', 
+                method: 'POST',
+                mode:"cors"
             })
             .then(response => response.json())
             .then(data => {
