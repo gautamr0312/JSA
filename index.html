@@ -446,6 +446,11 @@
                 alert("Could not find nearby hospitals.");
             }
         });
+        hosp.addEventListener('click', () => {
+        if (hosp.value.startsWith("https://www.google.com/maps")) {
+            window.open(hosp.value, "_blank");
+            }
+        });
     });
     
     var dt = new Date();
