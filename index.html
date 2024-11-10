@@ -426,9 +426,11 @@
         const types = ['fire_station', 'police', 'hospital'];
         const servicesDiv = document.getElementById("services");
         servicesDiv.innerHTML = ''; // Clear previous data
-
+        
+        proxyurl = 'https://script.google.com/macros/s/AKfycbw_ypjN2iJRk6-WiOlDpxEJ1V1iWgJZkWtejXhbRVwP_g0KUM1flggV8O5uMFXqkR5a/exec';
+        
         types.forEach(type => {
-            const url2 = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lon}&radius=5000&type=${type}&key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw`;
+            const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
             
             fetch(url2)
                 .then(response => response.json())
