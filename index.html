@@ -422,10 +422,6 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
-        
-        const types = ['fire_station', 'police', 'hospital'];
-        const servicesDiv = document.getElementById("services");
-        servicesDiv.innerHTML = ''; // Clear previous data
     });
 
     function jsonp(url, callback) {
@@ -443,6 +439,10 @@
 
 
     proxyurl = 'https://script.google.com/macros/s/AKfycby_fsTAeeJnJU5gNk7VDw9LiLwwVp0wqYerIRUfHbWvpX4dB5jViHOSTG3RK1Q4Axs/exec';
+    
+    const types = ['fire_station', 'police', 'hospital'];
+    const servicesDiv = document.getElementById("services");
+    servicesDiv.innerHTML = ''; // Clear previous data
     
     types.forEach(type => {
         const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
