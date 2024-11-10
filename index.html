@@ -433,7 +433,9 @@
         types.forEach(type => {
             const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
         
-            fetch(url2)
+            fetch(url2, { 
+                method: 'POST', 
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.results && data.results.length > 0) {
