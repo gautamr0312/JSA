@@ -150,8 +150,9 @@
     <input type="text" id="location" class="input-box">
 
     <!--Emergency Services-->
-    <label for="emergency">Emergency Services</label>
-    <div id="services"></div>
+    <label>Emergency Services</label>
+    <ul id="hospitallist"></ul>
+    <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw&libraries=places"></script>
 
     <!--Name-->
     <label for="firstname">Name</label>
@@ -429,32 +430,35 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
-        
-        types.forEach(type => {
-            const url2 = `${proxyurl}?lat=${lat}&lon=${lon}&radius=5000&type=${type}`;
-        
-            fetch(url2, { 
-                method: 'POST',
-                mode:"cors"
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.results && data.results.length > 0) {
-                    const service = data.results[0];
-                    console.log(service);
-                    servicesDiv.innerHTML += `<h3>Nearest ${type.replace('_', ' ')}</h3>
-                                               <p>Name: ${service.name}</p>
-                                               <p>Address: ${service.vicinity}</p>
-                                               <p>Rating: ${service.rating || 'N/A'}</p><hr>`;
-                } else {
-                    servicesDiv.innerHTML += `<p>No ${type.replace('_', ' ')} found nearby.</p>`;
-                }
-            })
-            .catch(error => {
-                servicesDiv.innerHTML += `<p>Error fetching ${type.replace('_', ' ')} details: ${error}</p>`;
-            });
+        const map = new google.maps.Map(document.createElement('div'),{
+            center: {lat: lat, lng: lon},
+            zoom: 15
+        });
+        const request = {
+            location: new google.maps.LatLng(lat, lon),
+            radius: '5000', // Search within 5 km radius
+            type: ['hospital']
+        };
+        const service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                displayHospitals(results);
+            } else {
+                alert("Could not find nearby hospitals.");
+            }
         });
     });
+
+    function displayHospitals(hospitals) {
+        const hospitalList = document.getElementById('hospitalList');
+        hospitalList.innerHTML = ''; // Clear previous results
+        
+        hospitals.forEach((hospital) => {
+            const li = document.createElement('li');
+            li.textContent = `${hospital.name} - ${hospital.vicinity}`;
+            hospitalList.appendChild(li);
+        });
+    }
     
     var dt = new Date();
     document.getElementById('date').value = dt.toLocaleString().split(',')[0];
