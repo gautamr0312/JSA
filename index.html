@@ -151,7 +151,7 @@
 
     <!--Emergency Services-->
     <label>Emergency Services</label>
-    <ul id="hospitalList"></ul>
+    <input type="text" id="hospital" class="input-box">
     <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw&libraries=places"></script>
 
     <!--Name-->
@@ -425,34 +425,23 @@
                 .catch(error => console.error('Error:', error));
             }
         const map = new google.maps.Map(document.createElement('div'),{
-            center: {lat: lat, lng: lon},
+            center: {lat: lat1, lng: lon1},
             zoom: 15
         });
         const request = {
-            location: new google.maps.LatLng(lat, lon),
+            location: new google.maps.LatLng(lat1, lon1),
             radius: '5000', // Search within 5 km radius
             type: ['hospital']
         };
         const service = new google.maps.places.PlacesService(map);
         service.nearbySearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                displayHospitals(results);
+                document.getElementById('hospital').value = results[0].name + ';' + results[0].vicinity;
             } else {
                 alert("Could not find nearby hospitals.");
             }
         });
     });
-
-    function displayHospitals(hospitals) {
-        const hospitalList = document.getElementById('hospitalList');
-        hospitalList.innerHTML = ''; // Clear previous results
-        
-        hospitals.forEach((hospital) => {
-            const li = document.createElement('li');
-            li.textContent = `${hospital.name} - ${hospital.vicinity}`;
-            hospitalList.appendChild(li);
-        });
-    }
     
     var dt = new Date();
     document.getElementById('date').value = dt.toLocaleString().split(',')[0];
