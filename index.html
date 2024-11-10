@@ -150,8 +150,18 @@
     <input type="text" id="location" class="input-box">
 
     <!--Emergency Services-->
-    <label>Emergency Services</label>
-    <input type="text" id="hospital" class="input-box">
+    <label for="Emergency">Emergency Services</label>
+    <div class="name-group">
+        <div class="input-box">
+            <input type="text" id="hospital" placeholder="Nearest Hospital">
+        </div>
+        <div class="input-box">
+            <input type="text" id="firestation" placeholder="Nearest Fire Station">
+        </div>
+        <div class="input-box">
+            <input type="text" id="sheriff" placeholder="Nearest Police Station">
+        </div>
+    </div>
     <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw&libraries=places"></script>
 
     <!--Name-->
@@ -424,35 +434,36 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
-        const map = new google.maps.Map(document.createElement('div'),{
-            center: {lat: lat, lng: lon},
-            zoom: 15
-        });
-        const request = {
-            location: new google.maps.LatLng(lat, lon),
-            radius: '50000', // Search within 5 km radius
-            type: ['hospital']
-        };
-        const service = new google.maps.places.PlacesService(map);
-        const hosp = document.getElementById('hospital');
-        service.nearbySearch(request, (results, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                const latitude = results[0].geometry.location.lat();
-                const longitude = results[0].geometry.location.lng();
-                const mapsLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-                console.log(mapsLink);
-                hosp.value = mapsLink;
-            } else {
-                alert("Could not find nearby hospitals.");
-            }
-        });
-        hosp.addEventListener('click', () => {
-        if (hosp.value.startsWith("https://www.google.com/maps")) {
-            window.open(hosp.value, "_blank");
-            }
-        });
+        function findplaces(type, elementID){
+            const map = new google.maps.Map(document.createElement('div'),{
+                center: {lat: lat, lng: lon},
+                zoom: 15
+            });
+            const request = {
+                location: new google.maps.LatLng(lat, lon),
+                radius: '50000', // Search within 5 km radius
+                type: [type]
+            };
+            const service = new google.maps.places.PlacesService(map);
+            const element = document.getElementById(elementID);
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+                    const latitude = results[0].geometry.location.lat();
+                    const longitude = results[0].geometry.location.lng();
+                    const mapsLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+                    console.log('${type} :', results[0]);
+                    element.value = mapsLink;
+                    element.addEventListener('click', () => window.open(mapsLink, "_blank"));
+                } else {
+                    element.value = 'Could not find nearby ${type.replace('-'," ")}.';
+                }
+            });
+        }
     });
-    
+    findplaces('hospital','hospital');
+    findplaces('fire_station','firestation');
+    findplaces('police','sheriff');
+
     var dt = new Date();
     document.getElementById('date').value = dt.toLocaleString().split(',')[0];
 
