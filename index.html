@@ -25,25 +25,34 @@
         }
 
         .container {
-            background-color: whitesmoke;
+            background: linear-gradient(135deg, whitesmoke 100%);
             padding: 40px;
             max-width: 600px;
             width: 100%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             font-size: 16px;
             border-radius: 10px;
-            text-align: left;
-            border-top: 80px solid lightgreen;
+            text-align: justify;
+            border-top: 80px solid #4CAF50;
             position: relative;
             margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header{
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Space between logo and heading */
+            margin-bottom: 20px;
+            position: relative;
+            top: -95px;
         }
         .logo {
-            position: absolute; /* Position the logo absolutely */
-            top: -65px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
-            width: 250px; /* Adjust the size of the logo */
+            position: relative;
+            left: -20px;
+            width: 175px; /* Adjust the size of the logo */
             height: auto; /* Maintain aspect ratio */
-            margin-bottom: 20px;
         }
         .button {
             padding: 12px 20px;
@@ -74,13 +83,15 @@
             color: #555;
         }
         h1 {
+            position: relative;
+            margin: 0;
             margin-top: 0px;
-            font-size: 24px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 30px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
             text-align: center;
         }
+
         input[type="text"], input[type="date"]{
             width: 100%;
             padding: 10px;
@@ -89,6 +100,7 @@
             margin-bottom: 20px;
             font-size: 16px;
             box-sizing: border-box;
+            transition: border 0.3s ease;
         }
 
         input[type="file"] {
@@ -101,6 +113,7 @@
             box-sizing: border-box;
             background-color: #4CAF50;
             color: white;
+            transition: border 0.3s ease;
         }
         
         input[type="file"]:hover{
@@ -137,10 +150,21 @@
             justify-content: center;
             margin-top: 20px;
         }
-        
+        .capturing {
+            display: flex;
+            gap: 50px; /* Adjust spacing between each service as needed */
+        }
+
+        .capture-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers label and button in each group */
+        }
+
         .emergency-services {
             display: flex;
-            gap: 20px; /* Adjust spacing between each service as needed */
+            justify-content: space-between;
+            gap: 100px; /* Adjust spacing between each service as needed */
         }
 
         .service {
@@ -163,15 +187,30 @@
         .service-btn:hover {
             background-color: #45a049;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .service {
+                font-size: 0.85em;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!--Logo-->
-    <img src="StrataLogo.jpg" class="logo">
-    
-    <h1>Safety Tool</h1>
+    <!--Logo and heading-->
+    <div class="header">
+        <img src="StrataLogo.jpg" class="logo">
+        <h1>JSA - Safety Monitoring System</h1>
+    </div>
 
     <!--Date-->
     <label for="date">Date</label>
@@ -230,14 +269,12 @@
     </select>
 
     <br>
-    <br>
 
     <div id="member-count-section" style="display: none;">
         <label for="member-count">How many members?</label>
         <input type="number" id="member-count" min="1" onchange="generateMemberFields()" />
     </div>
     
-    <br>
     <br>
 
     <div id="member-fields"></div>
@@ -327,12 +364,18 @@
 
     <!--Image Capture-->
     <label>Image Capture</label>
-    <div class="img" style="text-align: right;">
+    <div class="img" style="text-align: left;">
         <video id="videoElement" autoplay></video>
-        <button id="startButton">Start Webcam</button>
-        <button id="captureButton">Capture Photo</button>
         <canvas id="canvasElement" style="display: none;"></canvas>
         <img id="photoElement" style="display: none;">
+    </div>
+    <div class="capturing">
+        <div class="capture-buttons">
+            <button id="startButton" class="service-btn">Start Webcam</button>
+        </div>
+        <div class="capture-buttons">
+            <button id="captureButton" class="service-btn">Capture Photo</button>  
+        </div>
     </div>
     <br>
 
