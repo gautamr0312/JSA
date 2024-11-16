@@ -81,7 +81,7 @@
             margin-bottom: 30px;
             text-align: center;
         }
-        input[type="text"], input[type="date"], input[type="file"] {
+        input[type="text"], input[type="date"]{
             width: 100%;
             padding: 10px;
             border-radius: 5px;
@@ -102,7 +102,6 @@
             background-color: green;
             color: white;
         }
-
 
         .name-group {
             display: flex;
@@ -133,6 +132,18 @@
             justify-content: center;
             margin-top: 20px;
         }
+        
+        .emergency-services {
+            display: flex;
+            gap: 20px; /* Adjust spacing between each service as needed */
+        }
+
+        .service {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers label and button in each group */
+        }
+
         .service-btn {
             padding: 10px 20px;
             font-size: 16px;
@@ -176,17 +187,23 @@
     <label for="location">Work Location</label>
     <input type="text" id="location" class="input-box">
 
-    <!--Emergency Services-->
-    <label for="Emergency">Emergency Services</label>
-    <label>Hospital</label>
-    <button id="hospital-btn" class="service-btn" onclick="openMap('hospital')">Loading...</button>
-    
-    <label>Fire Station</label>
-    <button id="fire-station-btn" class="service-btn" onclick="openMap('fire-station')">Loading...</button>
-
-    <label>Police Station</label>
-    <button id="sheriff-station-btn" class="service-btn" onclick="openMap('sheriff-station')">Loading...</button>
-    <script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA49WbM_Xico2nQSk-jFf8E8j7qwd9Iqyw&libraries=places"></script>
+    <!-- Emergency Services -->
+    <div class="emergency-services">
+        <div class="service">
+            <label for="hospital-btn">Hospital</label>
+            <button id="hospital-btn" class="service-btn" onclick="openMap('hospital')">Loading...</button>
+        </div>
+        
+        <div class="service">
+            <label for="fire-station-btn">Fire Station</label>
+            <button id="fire-station-btn" class="service-btn" onclick="openMap('fire-station')">Loading...</button>
+        </div>
+        
+        <div class="service">
+            <label for="sheriff-station-btn">Police Station</label>
+            <button id="sheriff-station-btn" class="service-btn" onclick="openMap('sheriff-station')">Loading...</button>
+        </div>
+    </div>
 
     <!--Name-->
     <label for="firstname">Name</label>
