@@ -40,7 +40,7 @@
         .header{
             display: flex;
             align-items: center;
-            gap: 20px; /* Space between logo and heading */
+            gap: 15px; /* Space between logo and heading */
             margin-bottom: 20px;
             position: relative;
             top: -95px;
@@ -48,7 +48,7 @@
         .logo {
             position: relative;
             left: -20px;
-            width: 175px; /* Adjust the size of the logo */
+            width: 150px; /* Adjust the size of the logo */
             height: auto; /* Maintain aspect ratio */
         }
         .button {
@@ -130,14 +130,19 @@
         #predictionResult {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
-            text-align: center;
+            align-items: center;
+            width: 100%;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         #imagePreview img {
             max-width: 100%;
+            width: auto;
             height: auto;
             border-radius: 10px;
+            object-fit: contain;
         }
 
         .submit-button-container {
